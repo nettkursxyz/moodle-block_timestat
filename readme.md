@@ -9,7 +9,7 @@ Install block in standard way (copy it to '/moodle/blocks' folder and click 'Not
 ## Usage
 
 The block only counts the time on the pages to which it has been added, so you need to add the block on the pages where you want to count the time. If you want to add the block on the course page and on all activity pages at once, please refer to the following documentation:
-https://docs.moodle.org/400/en/Block_settings#Making_a_block_sticky_throughout_a_course
+https://docs.moodle.org/405/en/Block_settings#Making_a_block_sticky_throughout_a_course
 
 The block accounts for student *inactivity*, identified by no interactions such as clicks or scrolling. To prevent counting time during periods of inactivity, the tracking feature automatically pauses when a student is inactive for an extended period. You can customize the maximum inactivity time in the settings. It's also possible to adjust how often the recorded time is saved.
 
@@ -31,6 +31,14 @@ Classroom Revolution
 Lib Ertea
 Mart van der Niet
 Joseph Thibault
+
+Moodle 4.5
+Make sure the time counter do not stop even if users scroll down on the page
+A fix so that students now can view the report without seeing all other students.
+By:
+Thea Melberg
+Lars Aamodt
+
 
 ## License
 
