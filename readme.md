@@ -35,9 +35,7 @@ Joseph Thibault
 Moodle 4.5
 Make sure the time counter do not stop even if users scroll down on the page
 A fix so that students now can view the report without seeing all other students.
-By:
-Thea Melberg
-Lars Aamodt
+By: Thea Melberg, Lars Aamodt
 
 
 ## License
