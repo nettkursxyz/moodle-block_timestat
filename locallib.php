@@ -247,10 +247,21 @@ function block_timestat_report_log_print_mnet_selector_form($hostid, $course, $s
             '-view' => get_string('allchanges'),
     ];
 
-    // Get all the possible dates.
-    // Note that we are keeping track of real (GMT) time and user time.
-    // User time is only used in displays - all calcs and passing is GMT.
-
+    // Conditionally builds an array of course users and the guest user with their full names.
+if ($showusers) {
+    if ($courseusers) {
+        foreach ($courseusers as $courseuser) {
+            $users[$courseuser->id] = fullname($courseuser, has_capability('moodle/site:viewfullnames', $context));
+        }
+    }
+    $users[$CFG->siteguest] = get_string('guestuser');
+}
+// If user doesn't have capability to view participants, only show themselves
+if (!has_capability('moodle/course:viewparticipants', $context)) {
+    $users = array(); // Clear the users array
+    $users[$USER->id] = fullname($USER, has_capability('moodle/site:viewfullnames', $context));
+}
+    
     $timenow = time(); // GMT.
 
     // What day is it now for the user, and when is midnight that day (in GMT).
@@ -558,6 +569,21 @@ function block_timestat_report_log_print_selector_form($course, $selecteduser = 
         echo html_writer::select($groups, "group", $selectedgroup, get_string("allgroups"));
     }
 
+    // Conditionally builds an array of course users and the guest user with their full names.
+    if ($showusers) {
+    if ($courseusers) {
+        foreach ($courseusers as $courseuser) {
+            $users[$courseuser->id] = fullname($courseuser, has_capability('moodle/site:viewfullnames', $context));
+        }
+    }
+    $users[$CFG->siteguest] = get_string('guestuser');
+}
+
+// If user doesn't have capability to view participants, only show themselves
+if (!has_capability('moodle/course:viewparticipants', $context)) {
+    $users = array(); // Clear the users array
+    $users[$USER->id] = fullname($USER, has_capability('moodle/site:viewfullnames', $context));
+}
     if ($showusers) {
         echo html_writer::label(get_string('selctauser'), 'menuuser', false, ['class' => 'accesshide']);
         echo html_writer::select($users, "user", $selecteduser, get_string("allparticipants"));
