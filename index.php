@@ -148,6 +148,13 @@ $context = context_course::instance($course->id);
 
 require_capability('block/timestat:viewreport', $context);
 
+// If user doesn't have capability to view all participants, force to only see their own data
+if (!has_capability('moodle/course:viewparticipants', $context)) {
+    // Force user to be the current user, ignoring any user parameter from forms/URL
+    $user = $USER->id;
+    // Also set SESSION variable to ensure consistency across page loads
+    $_SESSION['timestat_force_user'] = $USER->id;
+}
 if (!empty($page)) {
     $strlogs = get_string('logs') . ": " . get_string('page', 'report_log', $page + 1);
 } else {
