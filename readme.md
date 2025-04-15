@@ -21,21 +21,17 @@ You can access the plugin *settings* from *Site Administration > Plugins > Block
 
 ## More information
 
-The version of the plugin for Moodle 2.9 and earlier was developed by:
-Barbara Dębska
-Łukasz Musiał
-Łukasz Sanokowski
+The version of the plugin for Moodle 2.9 and earlier was developed by: Barbara Dębska, Łukasz Musiał, Łukasz Sanokowski
 
 Upgrade from 1.9 to 2.5 version was made thanks to contribution of:
-Classroom Revolution
-Lib Ertea
-Mart van der Niet
-Joseph Thibault
+Classroom Revolution, Lib Ertea, Mart van der Niet, Joseph Thibault
 
-Moodle 4.5
+Update for Moodle 4.5: 
 Make sure the time counter do not stop even if users scroll down on the page
 A fix so that students now can view the report without seeing all other students.
-By: Thea Melberg, Lars Aamodt
+By:
+Thea Melberg
+Lars Aamodt
 
 
 ## License
