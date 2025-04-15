@@ -1,3 +1,8 @@
+// Defines the 'screentime' module for the 'block_timestat' block, exporting its functionality.
+define("block_timestat/screentime", ["exports"], function (_exports) {
+    Object.defineProperty(_exports, "__esModule", { value: !0 });
+    _exports.default = void 0;
+
 class Field {
     constructor(selector) {
         this.selector = selector;
@@ -39,7 +44,9 @@ export default class ScreenTime {
         this.lastReport = 0;
         this.reportInterval = this.options.reportInterval * 1000;
         document.addEventListener("visibilitychange", this.handleVisibilityChange.bind(this));
-        window.addEventListener('scroll', this.updateViewport.bind(this));
+        // Attaches scroll event listener to the window to reset the inactivity timer on scroll.
+        // We want the time to continue, when the studen scroll in a course..
+        window.addEventListener("scroll", this.resetInactivityTimer.bind(this));
         window.addEventListener('resize', this.updateViewport.bind(this));
         this.start();
     }
@@ -87,7 +94,7 @@ export default class ScreenTime {
     }
 
     addActivityListeners() {
-        const events = ['click', 'scroll', 'mousemove', 'keypress', 'touchstart', 'touchmove', 'wheel'];
+        const events = ['click', 'mousemove', 'keypress', 'touchstart', 'touchmove', 'wheel'];
         const inactivityEvents = ['beforeunload', 'unload', 'pagehide', 'blur'];
         events.forEach(event => {
             window.addEventListener(event, () => this.resetInactivityTimer());
