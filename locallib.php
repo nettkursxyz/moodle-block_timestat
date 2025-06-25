@@ -745,8 +745,7 @@ function block_timestat_build_logs_array($course, $user = 0, $datefrom = 0, $dat
 
     // If the group mode is separate, and this user does not have editing privileges,
     // Then only the user's group can be viewed.
-    if ($course->groupmode == SEPARATEGROUPS && !has_capability('moodle/course:managegroups',
-                    , $context)) {
+    if ($course->groupmode == SEPARATEGROUPS && !has_capability('moodle/course:managegroups', $context)) {
         if (isset($SESSION->currentgroup[$course->id])) {
             $groupid = $SESSION->currentgroup[$course->id];
         } else {
