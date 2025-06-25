@@ -56,7 +56,7 @@ if (!defined('REPORT_LOG_MAX_DISPLAY')) {
  */
 function block_timestat_report_log_print_mnet_selector_form($hostid, $course, $selecteduser = 0, $selecteddatefrom = 'today',
         $selecteddateto = 'today', $modid = 0, $selectedgroup = -1, $showcourses = 0,
-        $showusers = 0, $logformat = 'showashtml'): void {
+        $showusers = 0, $logformat = 'showashtml', $context): void {
 
     global $USER, $CFG, $SITE, $DB, $SESSION;
     require_once($CFG->dirroot . '/mnet/peer.php');
@@ -79,7 +79,6 @@ function block_timestat_report_log_print_mnet_selector_form($hostid, $course, $s
     // Context for remote data is always SITE.
     // Groups for remote data are always OFF.
     if ($hostid == $CFG->mnet_localhost_id) {
-        $context = context_course::instance($course->id);
 
         // Setup for group handling.
         if ($course->groupmode == SEPARATEGROUPS && !has_capability('moodle/site:accessallgroups', $context)) {
@@ -381,7 +380,7 @@ if (!has_capability('moodle/course:viewparticipants', $context)) {
  */
 function block_timestat_report_log_print_selector_form($course, $selecteduser = 0, $selecteddate = 'today', $modid = 0,
         $selectedgroup = -1, $showcourses = 0, $showusers = 0,
-        $logformat = 'showashtml') {
+        $logformat = 'showashtml', $context) {
 
     global $USER, $CFG, $DB, $SESSION;
 
@@ -392,7 +391,6 @@ function block_timestat_report_log_print_selector_form($course, $selecteduser = 
     }
 
     $sitecontext = context_system::instance();
-    $context = context_course::instance($course->id);
 
     // Setup for group handling.
     if ($course->groupmode == SEPARATEGROUPS && !has_capability('moodle/site:accessallgroups', $context)) {
@@ -637,12 +635,12 @@ if (!has_capability('moodle/course:viewparticipants', $context)) {
  * @throws coding_exception
  */
 function block_timestat_print_log($course, $user = 0, $datefrom = 0, $dateto = 0, $order = "l.timecreated ASC", $page = 0,
-        $perpage = 100, $url = "", $modname = "", $modid = 0, $modaction = "", $groupid = 0) {
+        $perpage = 100, $url = "", $modname = "", $modid = 0, $modaction = "", $groupid = 0, $context) {
 
     global $CFG, $OUTPUT;
 
     if (!$logs = block_timestat_build_logs_array($course, $user, $datefrom, $dateto, $order, $page * $perpage, $perpage,
-            $modname, $modid, $modaction, $groupid)) {
+            $modname, $modid, $modaction, $groupid, $context)) {
         echo $OUTPUT->notification(get_string('nologs', 'block_timestat'));
         echo $OUTPUT->footer();
         exit;
@@ -708,8 +706,7 @@ function block_timestat_print_log($course, $user = 0, $datefrom = 0, $dateto = 0
         }
 
         $row[] = html_writer::link(new moodle_url("/user/view.php?id={$log->userid}"),
-                fullname($log, has_capability('moodle/site:viewfullnames',
-                        context_course::instance($course->id))));
+                fullname($log, has_capability('moodle/site:viewfullnames', $context)));
 
         $row[] = block_timestat_seconds_to_stringtime($log->{'timespent'});
         $table->data[] = $row;
@@ -738,7 +735,7 @@ function block_timestat_print_log($course, $user = 0, $datefrom = 0, $dateto = 0
  */
 function block_timestat_build_logs_array($course, $user = 0, $datefrom = 0, $dateto = 0, $order = "l.timecreated ASC",
         $limitfrom = 0, $limitnum = 0,
-        $modname = "", $modid = 0, $modaction = "", $groupid = 0): array {
+        $modname = "", $modid = 0, $modaction = "", $groupid = 0, $context): array {
 
     global $DB, $SESSION, $USER;
     // It is assumed that $date is the GMT time of midnight for that day,
@@ -749,7 +746,7 @@ function block_timestat_build_logs_array($course, $user = 0, $datefrom = 0, $dat
     // If the group mode is separate, and this user does not have editing privileges,
     // Then only the user's group can be viewed.
     if ($course->groupmode == SEPARATEGROUPS && !has_capability('moodle/course:managegroups',
-                    context_course::instance($course->id))) {
+                    , $context)) {
         if (isset($SESSION->currentgroup[$course->id])) {
             $groupid = $SESSION->currentgroup[$course->id];
         } else {
