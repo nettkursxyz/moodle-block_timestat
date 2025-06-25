@@ -210,13 +210,13 @@ if (!empty($chooselog)) {
 
             echo $OUTPUT->heading(format_string($course->fullname) . ": $userinfo, $datefrominfo (" . usertimezone() . ")");
             block_timestat_report_log_print_mnet_selector_form($hostid, $course, $user, $datefrom, $dateto, $modid, $group,
-                    $showcourses, $showusers, $logformat);
+                    $showcourses, $showusers, $logformat, $context);
 
             if ($hostid == $CFG->mnet_localhost_id) {
                 block_timestat_print_log($course, $user, $datefrom, $dateto, 'l.timecreated DESC', $page, $perpage,
                         "index.php?id=$course->id&amp;chooselog=1&amp;user=$user&amp;datefrom=$datefrom&amp;dateto=$dateto&amp;
                         modid=$modid&amp;modaction=$modaction&amp;group=$group",
-                        $modname, $modid, $modaction, $group);
+                        $modname, $modid, $modaction, $group, $context);
             } else {
                 block_timestat_print_mnet_log(
                         $hostid, $id, $user, $datefrom, $dateto, 'l.timecreated DESC',
@@ -239,7 +239,7 @@ if (!empty($chooselog)) {
     echo $OUTPUT->heading(get_string('chooselogs') . ':');
 
     block_timestat_report_log_print_selector_form($course, $user, $datefrom, $modname, $modaction,
-            $group, $showcourses, $showusers);
+            $group, $showcourses, $showusers, $context);
 }
 
 echo $OUTPUT->footer();
